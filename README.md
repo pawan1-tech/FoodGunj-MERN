@@ -1,116 +1,99 @@
 # 🍔 FoodGunj - MERN Stack Food Ordering App
 
-FoodGunj is a **MERN (MongoDB, Express, React, Node.js)** based food ordering application that allows users to browse, add to cart, and order food items seamlessly. It features authentication, order history, and a fully functional backend with a MongoDB database.
+FoodGunj is a **MERN (MongoDB, Express, React, Node.js)** based food ordering application that lets users explore and order their favorite dishes. Features include user authentication, favorites list, cart management, and order tracking.
 
----
+## 🚀 Live Demo
+- Frontend: [FoodGunj App](https://foodgunj.netlify.app/)
 
-## 🚀 Features
-- User Authentication (JWT-based login & signup)
-- Browse food items with categories
-- Add to Cart and Place Orders
-- Order History & User Dashboard
-- Admin Panel for Managing Products & Orders
-- Responsive UI using React
-
----
-
-## 📸 Screenshots
-### 🔹 Home Page
-![Home Page](./screenshots/homepage.png)
-
-### 🔹 Food Details Page
-![Food Details](./screenshots/food_details.png)
-
-### 🔹 Cart Page
-![Cart Page](./screenshots/cart.png)
-
-### 🔹 Order History
-![Order History](./screenshots/order_history.png)
-
-(Place your actual screenshots in a `screenshots` folder inside the project.)
-
----
+## 🎯 Key Features
+- **User Authentication** (JWT-based)
+- **Product Management**
+  - Browse food items
+  - Search functionality
+  - Category filtering
+- **Shopping Features**
+  - Add to favorites
+  - Cart management
+  - Order placement
+- **Responsive Design**
+  - Mobile-first approach
+  - Clean UI with Material UI
 
 ## 🛠️ Tech Stack
-### **Frontend:**
-- React.js (with Hooks & Context API)
-- Tailwind CSS / Material UI for styling
-- Axios for API calls
+### Frontend
+- React.js
+- Material UI
+- Axios
+- React Router DOM
 
-### **Backend:**
-- Node.js & Express.js
-- MongoDB & Mongoose
+### Backend
+- Node.js
+- Express.js
+- MongoDB
 - JWT Authentication
-- Multer for Image Uploads
 
----
+## 🚀 Getting Started
 
-## 🎯 Installation & Setup
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB
+- npm/yarn
 
-### **1️⃣ Clone the Repository**
+### Installation Steps
+
+1. **Clone the repository**
 ```bash
-git clone https://github.com/your-username/FoodGunj.git
-cd FoodGunj
+git clone https://github.com/pawan1-tech/FoodGunj-MERN.git
+cd FoodGunj-MERN
 ```
 
-### **2️⃣ Backend Setup**
+2. **Backend Setup**
 ```bash
 cd server
 npm install
-```
-- Create a `.env` file in the `server` directory and add:
-```env
-PORT=8080
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_secret_key
-```
-- Start the backend server:
-```bash
-npm run dev
+
+# Create .env file with:
+# MONGODB_URI=your_mongodb_uri
+# JWT_SECRET=your_jwt_secret
+# PORT=8000
+
+npm start
 ```
 
-### **3️⃣ Frontend Setup**
+3. **Frontend Setup**
 ```bash
-cd ../client
+cd client
 npm install
 npm start
 ```
 
----
+## 📡 API Endpoints
 
-## 📌 API Endpoints
-### 🔹 **User Authentication**
-- `POST /api/auth/signup` - Register a new user
-- `POST /api/auth/login` - User login
+### Authentication
+- `POST /api/auth/signup` - Register
+- `POST /api/auth/login` - Login
 
-### 🔹 **Food Management**
-- `GET /api/foods` - Get all food items
-- `POST /api/foods` - Add new food (Admin only)
+### Products
+- `GET /api/products` - Get all products
+- `GET /api/products/:id` - Get single product
 
-### 🔹 **Cart & Orders**
-- `POST /api/cart` - Add item to cart
-- `POST /api/orders` - Place an order
-- `GET /api/orders` - Get user orders
+### User Operations
+- `GET /api/user/favorite` - Get favorites
+- `POST /api/user/favorite` - Add to favorites
+- `GET /api/user/cart` - Get cart items
+- `POST /api/user/cart` - Add to cart
+- `POST /api/user/order` - Place order
 
----
+## 👤 Author
+**Pawan Sah**
+- Email: sahpawan117@gmail.com
+- GitHub: [@pawan1-tech](https://github.com/pawan1-tech)
 
-## 🏗️ Future Enhancements
-- Payment Gateway Integration
-- Real-time Order Tracking
-- Review & Rating System
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome!
 
----
+## ⭐ Show your support
+Give a ⭐️ if this project helped you!
 
-
-## 🙌 Contributing
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
-
----
-
-## 🔗 Contact
-For any inquiries, reach out to **your-email@example.com** or visit the **GitHub Repository**: [FoodGunj](https://github.com/your-username/FoodGunj)
-
----
-
-⭐ **Star this project if you like it!** ⭐
-
+## 📝 License
+This project is [MIT](LICENSE) licensed.

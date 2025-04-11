@@ -1,9 +1,9 @@
 export const category = [
-  {
-    img: "https://i.pinimg.com/736x/fd/4b/1e/fd4b1e9fbbee80cb8528fea54cddcb50.jpg",
-    name: "Burgers",
-    off: "20-40% OFF",
-  },
+  // {
+  //   img: "https://i.pinimg.com/736x/fd/4b/1e/fd4b1e9fbbee80cb8528fea54cddcb50.jpg",
+  //   name: "Burgers",
+  //   off: "20-40% OFF",
+  // },
   {
     img: "https://img.freepik.com/premium-photo/huge-selection-peeroni-pizza-with-tomato-sauce-sausage-dark-table_124507-61025.jpg",
     name: "Pizzas",
