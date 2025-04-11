@@ -46,7 +46,7 @@ const NavLogo = styled(LinkR)`
   color: inherit;
 `;
 const Logo = styled.img`
-  height: 100px;
+  height: 150px;
 `;
 const NavItems = styled.ul`
   width: 100%;
