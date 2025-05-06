@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import ProductCard from "../components/cards/ProductsCard";
 import { filter } from "../utils/data";
@@ -88,9 +88,8 @@ const FoodListing = () => {
   const [priceRange, setPriceRange] = useState([0, 1000]); // Default price range
   const [selectedCategories, setSelectedCategories] = useState([]); // Default selected categories
 
-  const getFilteredProductsData = async () => {
+  const getFilteredProductsData = useCallback(async () => {
     setLoading(true);
-    // Call the API function for filtered products
     await getAllProducts(
       selectedCategories.length > 0
         ? `minPrice=${priceRange[0]}&maxPrice=${
@@ -101,11 +100,11 @@ const FoodListing = () => {
       setProducts(res.data);
       setLoading(false);
     });
-  };
+  }, [selectedCategories, priceRange]);
 
   useEffect(() => {
     getFilteredProductsData();
-  }, [priceRange, selectedCategories]);
+  }, [getFilteredProductsData]);
 
   return (
     <Container>

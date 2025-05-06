@@ -232,6 +232,7 @@ const Navbar = ({ setOpenAuth, openAuth, currentUser }) => {
                 <FavoriteBorder sx={{ color: "inherit", fontSize: "28px" }} />
               </Navlink>
               <Navlink to="/cart">
+               
                 <ShoppingCartOutlined
                   sx={{ color: "inherit", fontSize: "28px" }}
                 />

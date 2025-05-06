@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import ProductsCard from "../components/cards/ProductsCard";
 import { getFavourite } from "../api";
 import { CircularProgress } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { openSnackbar } from "../redux/reducers/SnackbarSlice";
+
 const Container = styled.div`
   padding: 20px 30px;
   padding-bottom: 200px;
@@ -43,19 +46,10 @@ const CardWrapper = styled.div`
 const Favourites = () => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
-
-  // const getProducts = async () => {
-  //   setLoading(true);
-  //   const token = localStorage.getItem("krist-app-token");
-  //   await getFavourite(token).then((res) => {
-  //     setProducts(res.data);
-  //     console.log(res.data);
-  //     setLoading(false);
-  //   });
-  // };
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
-  const getProducts = async () => {
+  const getProducts = useCallback(async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("foodGunj-app-token");
@@ -67,15 +61,20 @@ const Favourites = () => {
     } catch (err) {
       console.error("Error fetching favorites:", err);
       setError(err.message || "Failed to fetch favorites");
+      dispatch(
+        openSnackbar({
+          message: err.message || "Failed to fetch favorites",
+          severity: "error",
+        })
+      );
     } finally {
       setLoading(false);
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     getProducts();
-
-  }, []);
+  }, [getProducts]);
 
   return (
     <Container>
@@ -84,6 +83,8 @@ const Favourites = () => {
         <CardWrapper>
           {loading ? (
             <CircularProgress />
+          ) : error ? (
+            <div>{error}</div>
           ) : (
             <>
               {products.map((product) => (

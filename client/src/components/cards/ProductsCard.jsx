@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { CircularProgress, Rating } from "@mui/material";
 import {
-  AddShoppingCartOutlined,
   FavoriteBorder,
   FavoriteRounded,
   ShoppingBagOutlined,
-  ShoppingCart,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import {
@@ -180,7 +178,7 @@ const ProductsCard = ({ product }) => {
       });
   };
 
-  const checkFavorite = async () => {
+  const checkFavorite = useCallback(async () => {
     setFavoriteLoading(true);
     const token = localStorage.getItem("foodGunj-app-token");
     await getFavourite(token, { productId: product?._id })
@@ -188,9 +186,7 @@ const ProductsCard = ({ product }) => {
         const isFavorite = res.data?.some(
           (favorite) => favorite._id === product?._id
         );
-
         setFavorite(isFavorite);
-
         setFavoriteLoading(false);
       })
       .catch((err) => {
@@ -202,7 +198,7 @@ const ProductsCard = ({ product }) => {
           })
         );
       });
-  };
+  }, [dispatch, product?._id]);
 
   const addCart = async (id) => {
     const token = localStorage.getItem("foodGunj-app-token");
@@ -222,7 +218,7 @@ const ProductsCard = ({ product }) => {
 
   useEffect(() => {
     checkFavorite();
-  }, [favorite]);
+  }, [checkFavorite, product?._id]);
   return (
     <Card>
       <Top>
@@ -257,8 +253,8 @@ const ProductsCard = ({ product }) => {
         <Title>{product?.name}</Title>
         <Desc>{product?.desc}</Desc>
         <Price>
-          ${product?.price?.org} <Span>${product?.price?.mrp}</Span>
-          <Percent> (${product?.price?.off}% Off) </Percent>
+          Rs.{product?.price?.org} <Span>${product?.price?.mrp}</Span>
+          <Percent> ({product?.price?.off}% Off) </Percent>
         </Price>
       </Details>
     </Card>

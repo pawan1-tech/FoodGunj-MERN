@@ -1,17 +1,12 @@
 import { CircularProgress, Rating } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import Button from "../components/Button";
-import {
-  FavoriteBorder,
-  FavoriteBorderOutlined,
-  FavoriteRounded,
-} from "@mui/icons-material";
+import { FavoriteBorderOutlined, FavoriteRounded } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   addToCart,
   addToFavourite,
-  deleteFromCart,
   deleteFromFavourite,
   getFavourite,
   getProductDetails,
@@ -146,13 +141,13 @@ const FoodDetails = () => {
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState();
 
-  const getProduct = async () => {
+  const getProduct = useCallback(async () => {
     setLoading(true);
     await getProductDetails(id).then((res) => {
       setProduct(res.data);
       setLoading(false);
     });
-  };
+  }, [id]);
 
   const removeFavourite = async () => {
     setFavoriteLoading(true);
@@ -192,7 +187,7 @@ const FoodDetails = () => {
       });
   };
 
-  const checkFavorite = async () => {
+  const checkFavorite = useCallback(async () => {
     setFavoriteLoading(true);
     const token = localStorage.getItem("foodGunj-app-token");
     await getFavourite(token, { productId: id })
@@ -212,12 +207,12 @@ const FoodDetails = () => {
           })
         );
       });
-  };
+  }, [id, dispatch]);
 
   useEffect(() => {
     getProduct();
     checkFavorite();
-  }, []);
+  }, [getProduct, checkFavorite]);
 
   const addCart = async () => {
     setCartLoading(true);
