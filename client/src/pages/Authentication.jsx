@@ -1,121 +1,57 @@
 import React, { useState } from 'react'
 import { Modal } from "@mui/material";
-import styled from "styled-components";
 import LogoImage from "../utils/Images/Logo.png";
 import AuthImage from "../utils/Images/AuthImage.jpg";
 import { Close } from "@mui/icons-material";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 
-const Container = styled.div`
-  flex: 1;
-  height: 100%;
-  display: flex;
-  background: ${({ theme }) => theme.bg};
-`;
-const Left = styled.div`
-  flex: 1;
-  position: relative;
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
-`;
-const Right = styled.div`
-  position: relative;
-  flex: 0.9;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  gap: 16px;
-  align-items: center;
-  justify-content: center;
-  @media screen and (max-width: 768px) {
-    flex: 1;
-  }
-`;
-
-const Logo = styled.img`
-  position: absolute;
-  top: 40px;
-  left: 60px;
-  z-index: 10;
-`;
-const Image = styled.img`
-  position: relative;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-`;
-
-
-
-const CloseButton = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  border-radius: 50%;
-  padding: 2px;
-  width: 32px;
-  height: 32px;
-  border: 1px solid ${({ theme }) => theme.primary};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    background: ${({ theme }) => theme.primary + 20};
-  }
-`;
-
-const Text = styled.p`
-  display: flex;
-  gap: 12px;
-  font-size: 16px;
-  text-align: center;
-  color: ${({ theme }) => theme.text_secondary};
-  margin-top: 16px;
-  @media (max-width: 400px) {
-    font-size: 14px;
-  }
-`;
-const TextButton = styled.div`
-  color: ${({ theme }) => theme.primary};
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-`;
 const Authentication = ({ openAuth, setOpenAuth }) => {
   const [login, setLogin] = useState(true);
+
   return (
-    <Modal open={openAuth} onClose={() => setOpenAuth(false) } >
-      <Container>
-        <Left>
-          <Logo src={LogoImage} />
-          <Image src={AuthImage} />
-        </Left>
-        <Right>
-          <CloseButton>
-            <Close onClick={() => setOpenAuth(false)} />
-          </CloseButton>
+    <Modal open={openAuth} onClose={() => setOpenAuth(false)}>
+      <div className="flex flex-1 h-full bg-white">
+        <div className="flex-1 relative md:hidden">
+          <img src={LogoImage} alt="logo" className="absolute top-10 left-[60px] z-10" />
+          <img src={AuthImage} alt="auth" className="relative h-full w-full object-cover" />
+        </div>
+        <div className="flex-[0.9] md:flex-1 flex flex-col p-10 gap-4 items-center justify-center relative">
+          <div 
+            className="absolute top-5 right-5 rounded-full p-0.5 w-8 h-8 border border-red-600 flex justify-center items-center hover:bg-red-600/20 cursor-pointer"
+            onClick={() => setOpenAuth(false)}
+          >
+            <Close />
+          </div>
           {login ? (
             <>
               <SignIn setOpenAuth={setOpenAuth} />
-              <Text>
-                {''}
-                Don't have an account? 
-                <TextButton onClick={() => setLogin(false)}>Sign Up</TextButton>
-              </Text>
+              <p className="flex gap-3 text-base text-center text-gray-500 mt-4 md:text-sm">
+                Don't have an account?
+                <span 
+                  className="text-red-600 cursor-pointer transition-all duration-300 font-semibold"
+                  onClick={() => setLogin(false)}
+                >
+                  Sign Up
+                </span>
+              </p>
             </>
           ) : (
             <>
               <SignUp setOpenAuth={setOpenAuth} />
-              <Text>
-                Already have an account ?{" "}
-                <TextButton onClick={() => setLogin(true)}>Sign In</TextButton>
-              </Text>
+              <p className="flex gap-3 text-base text-center text-gray-500 mt-4 md:text-sm">
+                Already have an account?
+                <span 
+                  className="text-red-600 cursor-pointer transition-all duration-300 font-semibold"
+                  onClick={() => setLogin(true)}
+                >
+                  Sign In
+                </span>
+              </p>
             </>
           )}
-        </Right>
-      </Container>
+        </div>
+      </div>
     </Modal>
   )
 }

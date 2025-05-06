@@ -1,131 +1,5 @@
 import { CloseRounded, Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
-import styled from "styled-components";
-
-const Container = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-`;
-
-const Label = styled.label`
-  font-size: 12px;
-  color: ${({ theme }) => theme.primary};
-  padding: 0px 4px;
-  ${({ error, theme }) =>
-    error &&
-    `
-    color: ${theme.red};
-  `}
-  ${({ small }) =>
-    small &&
-    `
-    font-size: 8px;
-  `}
-  ${({ popup, theme }) =>
-    popup &&
-    `
-  color: ${theme.popup_text_secondary};
-  `}
-`;
-
-const OutlinedInput = styled.div`
-  border-radius: 8px;
-  border: 0.5px solid ${({ theme }) => theme.text_secondary};
-  background-color: transparent;
-  color: ${({ theme }) => theme.text_primary};
-  outline: none;
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  &:focus-within {
-    border-color: ${({ theme }) => theme.secondary};
-  }
-  ${({ error, theme }) =>
-    error &&
-    `
-    border-color: ${theme.red};
-  `}
-
-  ${({ chipableInput, height, theme }) =>
-    chipableInput &&
-    `
-    background: ${theme.card};
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    min-height: ${height}
-  `}
-
-  ${({ small }) =>
-    small &&
-    `
-    border-radius: 6px;
-    padding: 8px 10px;
-  `}
-
-  ${({ popup, theme }) =>
-    popup &&
-    `
-  color: ${theme.popup_text_secondary};
-  border: 0.5px solid ${theme.popup_text_secondary + 60};
-  `}
-`;
-
-const Input = styled.input`
-  width: 100%;
-  font-size: 14px;
-  outline: none;
-  border: none;
-  background-color: transparent;
-  color: ${({ theme }) => theme.primary};
-  &:focus {
-    outline: none;
-  }
-  ${({ small }) =>
-    small &&
-    `
-    font-size: 12px;
-  `}
-
-  ${({ popup, theme }) =>
-    popup &&
-    `
-  color: ${theme.popup_text_secondary};
-  `} ${({ theme }) => theme.popup_text_secondary};
-`;
-
-const Error = styled.p`
-  font-size: 12px;
-  margin: 0px 4px;
-  color: ${({ theme }) => theme.red};
-  ${({ small }) =>
-    small &&
-    `
-    font-size: 8px;
-  `}
-`;
-
-const ChipWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-`;
-
-const Chip = styled.div`
-  padding: 5px 10px;
-  border-radius: 8px;
-  background: ${({ theme }) => theme.primary + 10};
-  color: ${({ theme }) => theme.primary};
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-`;
 
 const TextInput = ({
   label,
@@ -146,41 +20,69 @@ const TextInput = ({
   password,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const getLabelClasses = () => {
+    let classes = "text-xs px-1 ";
+    if (error) classes += "text-red-600 ";
+    else if (popup) classes += "text-gray-400 ";
+    else classes += "text-red-600 ";
+    if (small) classes += "text-[8px] ";
+    return classes;
+  };
+
+  const getInputWrapperClasses = () => {
+    let classes = "rounded-lg border-[0.5px] bg-transparent outline-none p-4 flex items-center gap-3 ";
+    if (error) classes += "border-red-600 ";
+    else if (popup) classes += "border-gray-400/60 text-gray-400 ";
+    else classes += "border-gray-400 text-gray-800 focus-within:border-blue-600 ";
+    if (small) classes += "rounded-md p-2 px-2.5 ";
+    if (chipableInput) classes += "bg-white flex-col items-start gap-2 ";
+    if (height) classes += `min-h-[${height}] `;
+    return classes;
+  };
+
+  const getInputClasses = () => {
+    let classes = "w-full text-sm outline-none border-none bg-transparent ";
+    if (small) classes += "text-xs ";
+    if (popup) classes += "text-gray-400 ";
+    else classes += "text-red-600 ";
+    return classes;
+  };
+
   return (
-    <Container small={small}>
-      <Label small={small} popup={popup} error={error}>
-        {label}
-      </Label>
-      <OutlinedInput
-        small={small}
-        popup={popup}
-        error={error}
-        chipableInput={chipableInput}
-        height={height}
-      >
+    <div className={`flex-1 flex flex-col gap-1.5`}>
+      {label && (
+        <label className={getLabelClasses()}>
+          {label}
+        </label>
+      )}
+      <div className={getInputWrapperClasses()}>
         {chipableInput ? (
-          <ChipWrapper>
-            {chipableArray.map((chip, index) => (
-              <Chip key={index}>
+          <div className="flex flex-wrap gap-1.5">
+            {chipableArray?.map((chip, index) => (
+              <div 
+                key={index}
+                className="px-2.5 py-1.5 rounded-lg bg-red-600/10 text-red-600 text-xs flex items-center gap-1 cursor-pointer transition-all duration-300"
+              >
                 <span>{chip}</span>
                 <CloseRounded
                   sx={{ fontSize: "14px" }}
                   onClick={() => removeChip(name, index)}
                 />
-              </Chip>
+              </div>
             ))}
-            <Input
+            <input
+              className={getInputClasses()}
               placeholder={placeholder}
               name={name}
               value={value}
               onChange={(e) => handelChange(e)}
             />
-          </ChipWrapper>
+          </div>
         ) : (
           <>
-            <Input
-              popup={popup}
-              small={small}
+            <input
+              className={getInputClasses()}
               as={textArea ? "textarea" : "input"}
               name={name}
               rows={rows}
@@ -193,25 +95,27 @@ const TextInput = ({
             {password && (
               <>
                 {showPassword ? (
-                  <>
-                    <Visibility onClick={() => setShowPassword(false)} />
-                  </>
+                  <Visibility 
+                    className="cursor-pointer"
+                    onClick={() => setShowPassword(false)} 
+                  />
                 ) : (
-                  <>
-                    <VisibilityOff onClick={() => setShowPassword(true)} />
-                  </>
+                  <VisibilityOff 
+                    className="cursor-pointer"
+                    onClick={() => setShowPassword(true)} 
+                  />
                 )}
               </>
             )}
           </>
         )}
-      </OutlinedInput>
+      </div>
       {error && (
-        <Error small={small} popup={popup}>
+        <p className={`text-xs mx-1 text-red-600 ${small ? "text-[8px]" : ""}`}>
           {error}
-        </Error>
+        </p>
       )}
-    </Container>
+    </div>
   );
 };
 

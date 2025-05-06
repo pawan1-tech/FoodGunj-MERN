@@ -1,41 +1,10 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import TextInput from "./TextInput";
 import Button from "./Button";
 import { useDispatch } from "react-redux";
 import { UserSignIn } from "../api";
 import { loginSuccess } from "../redux/reducers/UserSlice";
 import { openSnackbar } from "../redux/reducers/SnackbarSlice";
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-`;
-const Title = styled.div`
-  font-size: 30px;
-  font-weight: 800;
-  color: ${({ theme }) => theme.primary};
-`;
-const Span = styled.div`
-  font-size: 16px;
-  font-weight: 400;
-  color: ${({ theme }) => theme.text_secondary + 90};
-`;
-const TextButton = styled.div`
-  width: 100%;
-  text-align: end;
-  color: ${({ theme }) => theme.text_primary};
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  &:hover {
-    color: ${({ theme }) => theme.primary};
-  }
-`;
 
 const SignIn = ({ setOpenAuth }) => {
   const dispatch = useDispatch();
@@ -83,12 +52,12 @@ const SignIn = ({ setOpenAuth }) => {
   };
 
   return (
-    <Container>
+    <div className="w-full max-w-[500px] flex flex-col gap-9">
       <div>
-        <Title>Welcome to FoodGunj</Title>
-        <Span>Please login with your details here</Span>
+        <h1 className="text-3xl font-extrabold text-red-600">Welcome to FoodGunj</h1>
+        <p className="text-base font-normal text-gray-500/90">Please login with your details here</p>
       </div>
-      <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
+      <div className="flex gap-5 flex-col">
         <TextInput
           label="Email Address"
           placeholder="Enter your email address"
@@ -103,7 +72,9 @@ const SignIn = ({ setOpenAuth }) => {
           handelChange={(e) => setPassword(e.target.value)}
         />
 
-        <TextButton>Forgot Password?</TextButton>
+        <button className="w-full text-end text-gray-800 cursor-pointer text-base transition-all duration-300 font-medium hover:text-red-600">
+          Forgot Password?
+        </button>
         <Button
           text="Sign In"
           onClick={handelSignIn}
@@ -111,7 +82,7 @@ const SignIn = ({ setOpenAuth }) => {
           isDisabled={buttonDisabled}
         />
       </div>
-    </Container>
+    </div>
   );
 };
 

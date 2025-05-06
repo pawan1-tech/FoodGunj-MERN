@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import styled from "styled-components";
 import { CircularProgress, Rating } from "@mui/material";
 import {
   FavoriteBorder,
@@ -15,123 +14,6 @@ import {
 } from "../../api";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../../redux/reducers/SnackbarSlice";
-
-const Card = styled.div`
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  transition: all 0.3s ease-out;
-  cursor: pointer;
-  @media (max-width: 600px) {
-    width: 180px;
-  }
-`;
-const Image = styled.img`
-  width: 100%;
-  height: 300px;
-  border-radius: 6px;
-  object-fit: cover;
-  transition: all 0.3s ease-out;
-  @media (max-width: 600px) {
-    height: 180px;
-  }
-`;
-const Menu = styled.div`
-  position: absolute;
-  z-index: 10;
-  color: ${({ theme }) => theme.text_primary};
-  top: 14px;
-  right: 14px;
-  display: none;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const Top = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  border-radius: 6px;
-  transition: all 0.3s ease-out;
-  &:hover {
-    background-color: ${({ theme }) => theme.black};
-  }
-
-  &:hover ${Image} {
-    opacity: 0.9;
-  }
-  &:hover ${Menu} {
-    display: flex;
-  }
-`;
-const MenuItem = styled.div`
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  background: white;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-`;
-const Rate = styled.div`
-  position: absolute;
-  z-index: 10;
-  color: ${({ theme }) => theme.text_primary};
-  bottom: 8px;
-  left: 8px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  background: white;
-  display: flex;
-  align-items: center;
-  opacity: 0.9;
-`;
-const Details = styled.div`
-  display: flex;
-  gap: 6px;
-  flex-direction: column;
-  padding: 4px 10px;
-`;
-const Title = styled.div`
-  font-size: 16px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.text_primary};
-`;
-const Desc = styled.div`
-  font-size: 16px;
-  font-weight: 400;
-  color: ${({ theme }) => theme.text_primary};
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  text-overflow: ellipsis;
-  white-space: normal;
-`;
-const Price = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 18px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.text_primary};
-`;
-const Percent = styled.div`
-  font-size: 12px;
-  font-weight: 500;
-  color: green;
-`;
-const Span = styled.div`
-  font-size: 14px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.text_secondary + 60};
-  text-decoration: line-through;
-  text-decoration-color: ${({ theme }) => theme.text_secondary + 50};
-`;
 
 const ProductsCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -219,45 +101,54 @@ const ProductsCard = ({ product }) => {
   useEffect(() => {
     checkFavorite();
   }, [checkFavorite, product?._id]);
+
   return (
-    <Card>
-      <Top>
-        <Image src={product?.img} />
-        <Menu>
-          <MenuItem
+    <div className="w-[300px] md:w-[180px] flex flex-col gap-4 transition-all duration-300 cursor-pointer">
+      <div className="relative flex items-center justify-center rounded-md transition-all duration-300 hover:bg-black group">
+        <img 
+          src={product?.img}
+          alt={product?.name}
+          className="w-full h-[300px] md:h-[180px] rounded-md object-cover transition-all duration-300 group-hover:opacity-90"
+        />
+        <div className="absolute z-10 top-3.5 right-3.5 hidden flex-col gap-3 group-hover:flex">
+          <div 
+            className="rounded-full w-[35px] h-[35px] bg-white p-2 flex items-center justify-center z-50"
             onClick={() => (favorite ? removeFavourite() : addFavourite())}
           >
             {favoriteLoading ? (
-              <>
-                <CircularProgress sx={{ fontSize: "20px" }} />
-              </>
+              <CircularProgress sx={{ fontSize: "22px" }} />
             ) : (
-              <>
-                {favorite ? (
-                  <FavoriteRounded sx={{ fontSize: "20px", color: "red" }} />
-                ) : (
-                  <FavoriteBorder sx={{ fontSize: "20px" }} />
-                )}
-              </>
+              favorite ? (
+                <FavoriteRounded sx={{ fontSize: "22px", color: "red" }} />
+              ) : (
+                <FavoriteBorder sx={{ fontSize: "22px" }} />
+              )
             )}
-          </MenuItem>
-          <MenuItem onClick={() => addCart(product?._id)}>
-            <ShoppingBagOutlined sx={{ fontSize: "20px" }} />
-          </MenuItem>
-        </Menu>
-        <Rate>
+          </div>
+          <div 
+            className="rounded-full w-[35px] h-[35px] bg-white p-2 flex items-center justify-center z-50"
+            onClick={() => addCart(product?._id)}
+          >
+            <ShoppingBagOutlined sx={{ fontSize: "22px" }} />
+          </div>
+        </div>
+        <div className="absolute z-10 bottom-2 left-2 px-2 py-1 rounded bg-white/90 flex items-center">
           <Rating value={3.5} sx={{ fontSize: "14px" }} />
-        </Rate>
-      </Top>
-      <Details onClick={() => navigate(`/dishes/${product._id}`)}>
-        <Title>{product?.name}</Title>
-        <Desc>{product?.desc}</Desc>
-        <Price>
-          Rs.{product?.price?.org} <Span>${product?.price?.mrp}</Span>
-          <Percent> ({product?.price?.off}% Off) </Percent>
-        </Price>
-      </Details>
-    </Card>
+        </div>
+      </div>
+      <div 
+        className="flex flex-col gap-1 px-2.5"
+        onClick={() => navigate(`/dishes/${product._id}`)}
+      >
+        <div className="text-base font-bold text-gray-800">{product?.name}</div>
+        <div className="text-base text-gray-800 line-clamp-2">{product?.desc}</div>
+        <div className="flex items-center gap-2 text-lg font-medium text-gray-800">
+          Rs.{product?.price?.org} 
+          <span className="text-sm font-medium text-gray-500 line-through">${product?.price?.mrp}</span>
+          <span className="text-xs font-medium text-green-600">({product?.price?.off}% Off)</span>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -1,6 +1,5 @@
 import { CircularProgress, Rating } from "@mui/material";
 import React, { useEffect, useState, useCallback } from "react";
-import styled from "styled-components";
 import Button from "../components/Button";
 import { FavoriteBorderOutlined, FavoriteRounded } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,123 +12,6 @@ import {
 } from "../api";
 import { openSnackbar } from "../redux/reducers/SnackbarSlice";
 import { useDispatch } from "react-redux";
-
-const Container = styled.div`
-  padding: 20px 30px;
-  padding-bottom: 200px;
-  height: 100%;
-  overflow-y: scroll;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 30px;
-  @media (max-width: 768px) {
-    padding: 20px 16px;
-  }
-  background: ${({ theme }) => theme.bg};
-`;
-
-const Wrapper = styled.div`
-  width: 100%;
-  flex: 1;
-  max-width: 1400px;
-  display: flex;
-  gap: 40px;
-  justify-content: center;
-  @media only screen and (max-width: 700px) {
-    flex-direction: column;
-    gap: 32px;
-  }
-`;
-
-const ImagesWrapper = styled.div`
-  flex: 0.7;
-  display: flex;
-  justify-content: center;
-`;
-const Image = styled.img`
-  max-width: 500px;
-  width: 100%;
-  max-height: 500px;
-  border-radius: 12px;
-  object-fit: cover;
-  @media (max-width: 768px) {
-    max-width: 400px;
-    height: 400px;
-  }
-`;
-
-const Details = styled.div`
-  flex: 1;
-  display: flex;
-  gap: 18px;
-  flex-direction: column;
-  padding: 4px 10px;
-`;
-const Title = styled.div`
-  font-size: 28px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.text_primary};
-`;
-const Desc = styled.div`
-  font-size: 16px;
-  font-weight: 400;
-  color: ${({ theme }) => theme.text_primary};
-`;
-const Price = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 22px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.text_primary};
-`;
-const Span = styled.div`
-  font-size: 16px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.text_secondary + 60};
-  text-decoration: line-through;
-  text-decoration-color: ${({ theme }) => theme.text_secondary + 50};
-`;
-
-const Percent = styled.div`
-  font-size: 16px;
-  font-weight: 500;
-  color: green;
-`;
-
-const Ingridents = styled.div`
-  font-size: 16px;
-  font-weight: 500;
-  diaplay: flex;
-  flex-direction: column;
-  gap: 24px;
-`;
-const Items = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-`;
-const Item = styled.div`
-  background: ${({ theme }) => theme.primary + 20};
-  color: ${({ theme }) => theme.primary};
-  font-size: 14px;
-  padding: 4px 12px;
-  display: flex;
-  border-radius: 12px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  gap: 16px;
-  padding: 32px 0px;
-  @media only screen and (max-width: 700px) {
-    gap: 12px;
-    padding: 12px 0px;
-  }
-`;
 
 const FoodDetails = () => {
   const { id } = useParams();
@@ -193,9 +75,7 @@ const FoodDetails = () => {
     await getFavourite(token, { productId: id })
       .then((res) => {
         const isFavorite = res.data?.some((favorite) => favorite._id === id);
-
         setFavorite(isFavorite);
-
         setFavoriteLoading(false);
       })
       .catch((err) => {
@@ -234,36 +114,44 @@ const FoodDetails = () => {
   };
 
   return (
-    <Container>
+    <div className="px-5 md:px-[30px] pb-[200px] h-full overflow-y-scroll flex items-center flex-col gap-[30px] bg-white">
       {loading ? (
         <CircularProgress />
       ) : (
-        <Wrapper>
-          <ImagesWrapper>
-            <Image src={product?.img} />
-          </ImagesWrapper>
-          <Details>
-            <div>
-              <Title>{product?.name}</Title>
-            </div>
+        <div className="w-full flex-1 max-w-[1400px] flex gap-10 justify-center md:flex-col md:gap-8">
+          <div className="flex-[0.7] flex justify-center">
+            <img 
+              src={product?.img}
+              alt={product?.name}
+              className="max-w-[500px] w-full max-h-[500px] rounded-xl object-cover md:max-w-[400px] md:h-[400px]" 
+            />
+          </div>
+          <div className="flex-1 flex gap-[18px] flex-col p-1 px-2.5">
+            <h1 className="text-[28px] font-semibold text-gray-800">{product?.name}</h1>
             <Rating value={3.5} />
-            <Price>
-              ₹{product?.price?.org} <Span>₹{product?.price?.mrp}</Span>{" "}
-              <Percent> (₹{product?.price?.off}% Off) </Percent>
-            </Price>
+            <div className="flex items-center gap-2 text-[22px] font-medium text-gray-800">
+              ₹{product?.price?.org} 
+              <span className="text-base font-medium text-gray-400/60 line-through">₹{product?.price?.mrp}</span>
+              <span className="text-base font-medium text-green-600">(₹{product?.price?.off}% Off)</span>
+            </div>
 
-            <Desc>{product?.desc}</Desc>
+            <p className="text-base font-normal text-gray-800">{product?.desc}</p>
 
-            <Ingridents>
-              Ingridents
-              <Items>
-                {product?.ingredients.map((ingredient) => (
-                  <Item>{ingredient}</Item>
+            <div className="text-base font-medium">
+              <div>Ingredients</div>
+              <div className="flex flex-wrap gap-3">
+                {product?.ingredients.map((ingredient, index) => (
+                  <span 
+                    key={index}
+                    className="bg-red-600/20 text-red-600 text-sm py-1 px-3 rounded-xl flex items-center justify-center"
+                  >
+                    {ingredient}
+                  </span>
                 ))}
-              </Items>
-            </Ingridents>
+              </div>
+            </div>
 
-            <ButtonWrapper>
+            <div className="flex gap-4 py-8 md:py-3">
               <Button
                 text="Add to Cart"
                 full
@@ -285,11 +173,11 @@ const FoodDetails = () => {
                 isLoading={favoriteLoading}
                 onClick={() => (favorite ? removeFavourite() : addFavourite())}
               />
-            </ButtonWrapper>
-          </Details>
-        </Wrapper>
+            </div>
+          </div>
+        </div>
       )}
-    </Container>
+    </div>
   );
 };
 

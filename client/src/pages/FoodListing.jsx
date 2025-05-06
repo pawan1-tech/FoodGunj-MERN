@@ -1,92 +1,14 @@
 import React, { useEffect, useState, useCallback } from "react";
-import styled from "styled-components";
 import ProductCard from "../components/cards/ProductsCard";
 import { filter } from "../utils/data";
 import { CircularProgress, Slider } from "@mui/material";
 import { getAllProducts } from "../api";
 
-const Container = styled.div`
-  padding: 20px 30px;
-  padding-bottom: 200px;
-  height: 100%;
-  overflow-y: scroll;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  gap: 30px;
-  @media (max-width: 700px) {
-    flex-direction: column;
-    padding: 20px 12px;
-  }
-  background: ${({ theme }) => theme.bg};
-`;
-const Filters = styled.div`
-  padding: 20px 16px;
-  flex: 1;
-  width: 100%;
-  max-width: 300px;
-  @media (max-width: 700px) {
-    max-width: 440px;
-  }
-`;
-const Menu = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
-const Products = styled.div`
-  flex: 1;
-  padding: 20px 0px;
-`;
-const CardWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
-  justify-content: center;
-  @media (max-width: 760px) {
-    gap: 16px;
-  }
-`;
-
-const FilterSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 12px;
-`;
-const Title = styled.div`
-  font-size: 20px;
-  font-weight: 500;
-`;
-const Item = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-`;
-const Selectableitem = styled.div`
-  cursor: pointer;
-  display: flex;
-  border: 1px solid ${({ theme }) => theme.text_secondary + 50};
-  color: ${({ theme }) => theme.text_secondary + 90};
-  border-radius: 8px;
-  padding: 2px 8px;
-  font-size: 16px;
-  width: fit-content;
-  ${({ selected, theme }) =>
-    selected &&
-    `
-  border: 1px solid ${theme.text_primary};
-  color: ${theme.text_primary};
-  background: ${theme.text_primary + 30};
-  font-weight: 500;
-  `}
-`;
-
 const FoodListing = () => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
-  const [priceRange, setPriceRange] = useState([0, 1000]); // Default price range
-  const [selectedCategories, setSelectedCategories] = useState([]); // Default selected categories
+  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const getFilteredProductsData = useCallback(async () => {
     setLoading(true);
@@ -107,12 +29,12 @@ const FoodListing = () => {
   }, [getFilteredProductsData]);
 
   return (
-    <Container>
-      <Filters>
-        <Menu>
-          {filter.map((filters) => (
-            <FilterSection>
-              <Title>{filters.name}</Title>
+    <div className="px-5 md:px-[30px] pb-[200px] h-full overflow-y-scroll flex flex-row items-center gap-[30px] bg-white md:flex-col">
+      <div className="p-5 px-4 flex-1 w-full max-w-[300px] md:max-w-[440px]">
+        <div className="flex flex-col gap-1">
+          {filter.map((filters, index) => (
+            <div key={index} className="flex flex-col gap-4 p-3">
+              <h2 className="text-xl font-medium">{filters.name}</h2>
               {filters.value === "price" ? (
                 <Slider
                   aria-label="Price"
@@ -127,11 +49,16 @@ const FoodListing = () => {
                   onChange={(e, newValue) => setPriceRange(newValue)}
                 />
               ) : filters.value === "category" ? (
-                <Item>
-                  {filters.items.map((item) => (
-                    <Selectableitem
-                      key={item}
-                      selected={selectedCategories.includes(item)}
+                <div className="flex flex-wrap gap-2.5">
+                  {filters.items.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className={`cursor-pointer flex border rounded-lg px-2 py-0.5 text-base w-fit transition-all
+                        ${
+                          selectedCategories.includes(item)
+                            ? "border-gray-800 text-gray-800 bg-gray-800/30 font-medium"
+                            : "border-gray-400/50 text-gray-400/90"
+                        }`}
                       onClick={() =>
                         setSelectedCategories((prevCategories) =>
                           prevCategories.includes(item)
@@ -143,16 +70,16 @@ const FoodListing = () => {
                       }
                     >
                       {item}
-                    </Selectableitem>
+                    </div>
                   ))}
-                </Item>
+                </div>
               ) : null}
-            </FilterSection>
+            </div>
           ))}
-        </Menu>
-      </Filters>
-      <Products>
-        <CardWrapper>
+        </div>
+      </div>
+      <div className="flex-1 py-5">
+        <div className="flex flex-wrap gap-8 md:gap-4 justify-center">
           {loading ? (
             <CircularProgress />
           ) : (
@@ -162,9 +89,9 @@ const FoodListing = () => {
               ))}
             </>
           )}
-        </CardWrapper>
-      </Products>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 

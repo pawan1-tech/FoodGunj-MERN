@@ -1,73 +1,7 @@
 import { CircularProgress } from "@mui/material";
 import React from "react";
-import styled from "styled-components";
 
-const Button = styled.div`
-  border-radius: 10px;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  height: min-content;
-  padding: 16px 26px;
-  box-shadow: 1px 20px 35px 0px ${({ theme }) => theme.primary + 40};
-  border: 1px solid ${({ theme }) => theme.primary};
-  @media (max-width: 600px) {
-    padding: 8px 12px;
-  }
-
-  ${({ type, theme }) =>
-    type === "secondary"
-      ? `
-  background: ${theme.secondary};
-border: 1px solid ${({ theme }) => theme.secondary};
-  `
-      : `
-  background: ${theme.primary};
-`}
-
-  ${({ isDisabled }) =>
-    isDisabled &&
-    `
-  opacity: 0.8;
-  cursor: not-allowed;
-
-  `}
-  ${({ isLoading }) =>
-    isLoading &&
-    `
-    opacity: 0.8;
-  cursor: not-allowed;
-`}
-${({ flex }) =>
-    flex &&
-    `
-    flex: 1;
-`}
-
-${({ small }) =>
-    small &&
-    `
-padding: 10px 28px;
-`}
-  ${({ outlined, theme }) =>
-    outlined &&
-    `
-background: transparent;
-color: ${theme.primary};
-  box-shadow: none;
-`}
-  ${({ full }) =>
-    full &&
-    `
-  width: 100%;`}
-`;
-
-const button = ({
+const Button = ({
   text,
   isLoading,
   isDisabled,
@@ -80,16 +14,39 @@ const button = ({
   outlined,
   full,
 }) => {
+  const getButtonClasses = () => {
+    let classes = "rounded-xl text-white text-sm cursor-pointer transition-all duration-300 flex items-center justify-center gap-1.5 ";
+    
+    // Base styles
+    classes += small ? "py-2.5 px-7 " : "py-4 px-6.5 md:py-2 md:px-3 ";
+    
+    // Type styles
+    if (type === "secondary") {
+      classes += outlined 
+        ? "bg-transparent text-blue-600 border border-blue-600 "
+        : "bg-blue-600 border border-blue-600 ";
+    } else {
+      classes += outlined 
+        ? "bg-transparent text-red-600 border border-red-600 "
+        : "bg-red-600 border border-red-600 ";
+    }
+    
+    // State styles
+    if (isDisabled || isLoading) {
+      classes += "opacity-80 cursor-not-allowed ";
+    }
+    
+    // Layout styles
+    if (flex) classes += "flex-1 ";
+    if (full) classes += "w-full ";
+    
+    return classes.trim();
+  };
+
   return (
-    <Button
+    <div
       onClick={() => !isDisabled && !isLoading && onClick()}
-      isDisabled={isDisabled}
-      type={type}
-      isLoading={isLoading}
-      flex={flex}
-      small={small}
-      outlined={outlined}
-      full={full}
+      className={getButtonClasses()}
     >
       {isLoading && (
         <CircularProgress
@@ -100,8 +57,8 @@ const button = ({
       {text}
       {isLoading && <> . . .</>}
       {rightIcon}
-    </Button>
+    </div>
   );
 };
 
-export default button;
+export default Button;

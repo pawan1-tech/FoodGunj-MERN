@@ -1,29 +1,10 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import TextInput from "./TextInput";
 import Button from "./Button";
 import { UserSignUp } from "../api";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../redux/reducers/UserSlice";
 import { openSnackbar } from "../redux/reducers/SnackbarSlice";
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-`;
-const Title = styled.div`
-  font-size: 30px;
-  font-weight: 800;
-  color: ${({ theme }) => theme.primary};
-`;
-const Span = styled.div`
-  font-size: 16px;
-  font-weight: 400;
-  color: ${({ theme }) => theme.text_secondary + 90};
-`;
 
 const SignUp = ({ setOpenAuth }) => {
   const dispatch = useDispatch();
@@ -84,13 +65,14 @@ const SignUp = ({ setOpenAuth }) => {
         });
     }
   };
+
   return (
-    <Container>
+    <div className="w-full max-w-[500px] flex flex-col gap-9">
       <div>
-        <Title>Create New Account 👋</Title>
-        <Span>Please enter details to create a new account</Span>
+        <h1 className="text-3xl font-extrabold text-red-600">Create New Account 👋</h1>
+        <p className="text-base font-normal text-gray-500/90">Please enter details to create a new account</p>
       </div>
-      <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
+      <div className="flex gap-5 flex-col">
         <TextInput
           label="Full Name"
           placeholder="Enter your full name"
@@ -117,7 +99,7 @@ const SignUp = ({ setOpenAuth }) => {
           isDisabled={buttonDisabled}
         />
       </div>
-    </Container>
+    </div>
   );
 };
 
