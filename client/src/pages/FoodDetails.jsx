@@ -11,6 +11,7 @@ import {
   getProductDetails,
 } from "../api";
 import { openSnackbar } from "../redux/reducers/SnackbarSlice";
+import { updateUser } from "../redux/reducers/UserSlice";
 import { useDispatch } from "react-redux";
 
 const FoodDetails = () => {
@@ -99,6 +100,7 @@ const FoodDetails = () => {
     const token = localStorage.getItem("foodGunj-app-token");
     await addToCart(token, { productId: id, quantity: 1 })
       .then((res) => {
+        dispatch(updateUser({ user: res.data.user }));
         setCartLoading(false);
         navigate("/cart");
       })

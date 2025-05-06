@@ -14,12 +14,14 @@ import {
 } from "../../api";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../../redux/reducers/SnackbarSlice";
+import { updateUser } from "../../redux/reducers/UserSlice";
 
 const ProductsCard = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [favorite, setFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [cartLoading, setCartLoading] = useState(false);
 
   const addFavourite = async () => {
     setFavoriteLoading(true);
@@ -83,15 +85,19 @@ const ProductsCard = ({ product }) => {
   }, [dispatch, product?._id]);
 
   const addCart = async (id) => {
+    setCartLoading(true);
     const token = localStorage.getItem("foodGunj-app-token");
     await addToCart(token, { productId: id, quantity: 1 })
       .then((res) => {
+        dispatch(updateUser({ user: res.data.user }));
+        setCartLoading(false);
         navigate("/cart");
       })
       .catch((err) => {
+        setCartLoading(false);
         dispatch(
           openSnackbar({
-            message: err.response.data.message,
+            message: err.response?.data?.message || err.message,
             severity: "error",
           })
         );
@@ -129,7 +135,11 @@ const ProductsCard = ({ product }) => {
             className="rounded-full w-[35px] h-[35px] bg-white p-2 flex items-center justify-center z-50"
             onClick={() => addCart(product?._id)}
           >
-            <ShoppingBagOutlined sx={{ fontSize: "22px" }} />
+            {cartLoading ? (
+              <CircularProgress sx={{ fontSize: "22px" }} />
+            ) : (
+              <ShoppingBagOutlined sx={{ fontSize: "22px" }} />
+            )}
           </div>
         </div>
         <div className="absolute z-10 bottom-2 left-2 px-2 py-1 rounded bg-white/90 flex items-center">

@@ -6,6 +6,7 @@ import { CircularProgress } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../redux/reducers/SnackbarSlice";
 import { DeleteOutline } from "@mui/icons-material";
+import { updateUser } from "../redux/reducers/UserSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -97,6 +98,7 @@ const Cart = () => {
     const token = localStorage.getItem("foodGunj-app-token");
     await addToCart(token, { productId: id, quantity: 1 })
       .then((res) => {
+        dispatch(updateUser({ user: res.data.user }));
         setReload(!reload);
       })
       .catch((err) => {
@@ -119,6 +121,7 @@ const Cart = () => {
       quantity: qnt,
     })
       .then((res) => {
+        dispatch(updateUser({ user: res.data.user }));
         setReload(!reload);
       })
       .catch((err) => {
