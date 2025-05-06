@@ -15,6 +15,7 @@ import { logout } from "../redux/reducers/UserSlice";
 const Navbar = ({ setOpenAuth, openAuth, currentUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
+  const cartCount = currentUser?.cart?.length || 0;
 
   const navLinkClasses = ({ isActive }) => 
     `flex items-center text-gray-800 font-medium cursor-pointer transition-all duration-1000 no-underline hover:text-red-600 ${
@@ -40,7 +41,14 @@ const Navbar = ({ setOpenAuth, openAuth, currentUser }) => {
             <FavoriteBorder sx={{ color: "inherit", fontSize: "28px" }} />
           </NavLink>
           <NavLink to="/cart" className={navLinkClasses}>
-            <ShoppingCartOutlined sx={{ color: "inherit", fontSize: "28px" }} />
+            <div className="relative">
+              <ShoppingCartOutlined sx={{ color: "inherit", fontSize: "28px" }} />
+              {cartCount > 0 && (
+                <div className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                  {cartCount}
+                </div>
+              )}
+            </div>
           </NavLink>
           {currentUser && (
             <Avatar src={currentUser?.img}>{currentUser?.name[0]}</Avatar>
@@ -64,7 +72,14 @@ const Navbar = ({ setOpenAuth, openAuth, currentUser }) => {
                 <FavoriteBorder sx={{ color: "inherit", fontSize: "28px" }} />
               </NavLink>
               <NavLink to="/cart" className={navLinkClasses}>
-                <ShoppingCartOutlined sx={{ color: "inherit", fontSize: "28px" }} />
+                <div className="relative">
+                  <ShoppingCartOutlined sx={{ color: "inherit", fontSize: "28px" }} />
+                  {cartCount > 0 && (
+                    <div className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                      {cartCount}
+                    </div>
+                  )}
+                </div>
               </NavLink>
               <Avatar src={currentUser?.img}>{currentUser?.name[0]}</Avatar>
               <button 
